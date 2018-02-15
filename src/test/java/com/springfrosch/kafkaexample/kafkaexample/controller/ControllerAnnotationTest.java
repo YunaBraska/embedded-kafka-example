@@ -1,25 +1,32 @@
 package com.springfrosch.kafkaexample.kafkaexample.controller;
 
-import com.springfrosch.kafkaexample.kafkaexample.util.SpringBootEmbeddedKafka;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-//You could take @EmbeddedKafka annotation but it wont be included in newer versions of "spring-kafka-test"
-//@EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
-public class ControllerTest extends SpringBootEmbeddedKafka {
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@EmbeddedKafka(partitions = 1, brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
+public class ControllerAnnotationTest {
 
     @Autowired
     private Receiver receiver;
 
     @Autowired
     private Sender sender;
+
+    @Autowired
+    private KafkaTemplate kafka;
 
     @Value("${kafkatest.topic}")
     private String topic;
